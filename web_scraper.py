@@ -1,16 +1,5 @@
 #!/usr/bin/python
 
-# python web_scraper.py
-
-# python -m venv web-scraper/
-# source web-scraper/bin/activate
-
-# pip install -r requirements.txt
-
-# pip install playwright && pip freeze > requirements.txt
-# playwright install
-# python web_scraper.py
-
 import asyncio
 import pprint
 import csv
