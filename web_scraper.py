@@ -16,11 +16,6 @@ with open('data-to-scrape.csv', mode = 'r', newline='') as file:
     data = list(reader)
     lines_number = len(data)
 
-url1 = data[0][0]
-first_param_selector1 = data[0][1]
-second_param_selector1 = data[0][2]
-third_param_selector1 = data[0][3]
-
 async def scrape_website (
     url: str,
     first_param_selector: str,
@@ -70,25 +65,12 @@ async def scrape_website (
         return sort_list_by('first_param_text', resulting_list)
 
 async def main ():
-    scraped_output = [await scrape_website(
-        url1,
-        first_param_selector1,
-        second_param_selector1,
-        third_param_selector1
-    )]
-
-    if lines_number > 1:
-        url2 = data[1][0]
-        first_param_selector2 = data[1][1]
-        second_param_selector2 = data[1][2]
-        third_param_selector2 = data[1][3]
-
-        scraped_output.append(await scrape_website(
-            url2,
-            first_param_selector2,
-            second_param_selector2,
-            third_param_selector2
-        ))
+    scraped_output = await asyncio.gather(*[scrape_website(
+        data[line][0],
+        data[line][1],
+        data[line][2],
+        data[line][3]
+    ) for line in range(lines_number)])
 
     pprint.pprint(scraped_output)
 
