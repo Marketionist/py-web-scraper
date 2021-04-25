@@ -25,10 +25,10 @@ playwright install
     2 - selector (CSS or XPath) for the first parameter that you want to scrape
     3 - selector (CSS or XPath) for the second parameter that you want to scrape
     4 - selector (CSS or XPath) for the third parameter that you want to scrape
-For example:
+As it is a .csv file, each value (cell) is separated by comma. For example:
 ```
 https://www.bbc.com/,.module--news .media-list__item:nth-child(1) .media__link,.module--news .media-list__item:nth-child(2) .media__link,.module--news .media-list__item:nth-child(3) .media__link
-https://www.cnn.com/business/tech,'(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[1]','(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[2]','(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[3]'
+https://www.cnn.com/business/tech,(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[1],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[2],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[3]
 ```
 
 ## Running
