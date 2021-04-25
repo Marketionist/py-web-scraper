@@ -11,19 +11,15 @@ def parse_int (string: str) -> int:
 def sort_list_by (sorting_key: str, array_to_sort: list) -> list:
     return sorted(array_to_sort, key=lambda keyy: keyy[sorting_key], reverse=True)
 
-with open('file.csv', mode = 'r', newline='') as file:
+with open('data-to-scrape.csv', mode = 'r', newline='') as file:
     reader = csv.reader(file)
     data = list(reader)
+    lines_number = len(data)
 
 url1 = data[0][0]
 first_param_selector1 = data[0][1]
 second_param_selector1 = data[0][2]
 third_param_selector1 = data[0][3]
-
-url2 = data[1][0]
-links_selector2 = data[1][1]
-second_param_selector2 = data[1][2]
-third_param_selector2 = data[1][3]
 
 async def scrape_website (
     url: str,
@@ -46,17 +42,26 @@ async def scrape_website (
         await page.goto(url)
         await page.wait_for_selector(first_param_selector)
 
-        first_param_elements = await page.query_selector_all(first_param_selector)
-        second_param_elements = await page.query_selector_all(second_param_selector)
-        third_param_elements = await page.query_selector_all(third_param_selector)
+        resulting_param_elements = await asyncio.gather(
+            page.query_selector_all(first_param_selector),
+            page.query_selector_all(second_param_selector),
+            page.query_selector_all(third_param_selector)
+        )
 
         resulting_list = []
 
-        for index, link in enumerate(first_param_elements):
+        for index, value in enumerate(resulting_param_elements[0]):
+            resulting_texts = await asyncio.gather(
+                value.text_content(),
+                resulting_param_elements[1][index].text_content(),
+                resulting_param_elements[2][index].text_content()
+            )
+
             resulting_list.append({
-                'first_param_text': await link.text_content(),
-                'second_param_text': await second_param_elements[index].text_content(),
-                'third_param_text': parse_int(await third_param_elements[index].text_content())
+                'url': url,
+                'first_param_text': resulting_texts[0].replace('\n', ''),
+                'second_param_text': resulting_texts[1].replace('\n', ''),
+                'third_param_text': resulting_texts[2].replace('\n', '')
             })        
 
         await context.close()
@@ -64,13 +69,26 @@ async def scrape_website (
 
         return sort_list_by('first_param_text', resulting_list)
 
-async def main():
-    scraped_output = await scrape_website(
+async def main ():
+    scraped_output = [await scrape_website(
         url1,
         first_param_selector1,
         second_param_selector1,
         third_param_selector1
-    )
+    )]
+
+    if lines_number > 1:
+        url2 = data[1][0]
+        first_param_selector2 = data[1][1]
+        second_param_selector2 = data[1][2]
+        third_param_selector2 = data[1][3]
+
+        scraped_output.append(await scrape_website(
+            url2,
+            first_param_selector2,
+            second_param_selector2,
+            third_param_selector2
+        ))
 
     pprint.pprint(scraped_output)
 
