@@ -61,6 +61,13 @@ this:
 INCOMING_DATA_SOURCE=my-file-with-data-to-scrape.csv HEADED=True python web_scraper.py
 ```
 
+If you want to configure a cron job to run this script 2 times per day, you can set the time like this:
+```
+0 10,22 * * *
+```
+It will run twice per day: 10:00am and 10:00pm (https://crontab.guru/)
+
+
 ## Optional
 In case if you would like to install any additional dependencies (for example
 scrapy) - run:
