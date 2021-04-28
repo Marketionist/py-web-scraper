@@ -7,7 +7,7 @@ import csv
 from playwright.async_api import async_playwright
 
 def parse_int (string: str) -> int:
-    return ''.join((filter(lambda x: x.isdigit(), string)))
+    return int(''.join((filter(lambda x: x.isdigit(), string))))
 
 def sort_list_by (sorting_key: str, array_to_sort: list) -> list:
     return sorted(array_to_sort, key=lambda keyy: keyy[sorting_key], reverse=True)
