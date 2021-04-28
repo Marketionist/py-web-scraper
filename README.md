@@ -34,6 +34,8 @@ Or if you just want to get first 3 article titles:
 ```
 https://www.cnn.com/business/tech,(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[1],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[2],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[3]
 ```
+6. Create a `data-processed.csv` file with any data that you do not want to be
+displayed in the scraper output
 
 ## Running
 To run the script just execute:
@@ -64,4 +66,4 @@ pip install scrapy && pip freeze > requirements.txt
 
 ## Thanks
 If this script was helpful to you, please give it a **★ Star** on
-[GitHub](https://github.com/Marketionist/py-web-scraper).
+[GitHub](https://github.com/Marketionist/py-web-scraper)
