@@ -2,15 +2,18 @@
 
 A scraper to collect data from the websites
 
+## Requirements
+Python version 3.7+
+
 ## Installation
 1. Clone this repository:
 ```bash
-git clone git@github.com:Marketionist/py-web-scraper.git
+git clone https://github.com/Marketionist/py-web-scraper.git
 ```
 2. Create virtual environment and activate it:
 ```bash
-python -m venv web-scraper/
-source web-scraper/bin/activate
+python -m venv py-web-scraper/
+source py-web-scraper/bin/activate
 ```
 3. Install all dependencies:
 ```bash
@@ -57,6 +60,13 @@ this:
 ```bash
 INCOMING_DATA_SOURCE=my-file-with-data-to-scrape.csv HEADED=True python web_scraper.py
 ```
+
+If you want to configure a cron job to run this script 2 times per day, you can set the time like this:
+```
+0 10,22 * * *
+```
+It will run twice per day: 10:00am and 10:00pm (https://crontab.guru/)
+
 
 ## Optional
 In case if you would like to install any additional dependencies (for example
