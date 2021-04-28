@@ -27,7 +27,11 @@ playwright install
     4 - selector (CSS or XPath) for the third parameter that you want to scrape
 As it is a .csv file, each value (cell) is separated by comma. For example:
 ```
-https://www.bbc.com/,.module--news .media-list__item:nth-child(1) .media__link,.module--news .media-list__item:nth-child(2) .media__link,.module--news .media-list__item:nth-child(3) .media__link
+https://www.bbc.com/news/technology,[class*="gel-3/5@xxl"] .qa-status-date-output,[class*="gel-3/5@xxl"] .gs-c-promo-heading__title,[class*="gel-3/5@xxl"] .gs-c-section-link
+https://news.ycombinator.com/,.rank,.storylink,.age
+```
+Or if you just want to get first 3 article titles:
+```
 https://www.cnn.com/business/tech,(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[1],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[2],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[3]
 ```
 
@@ -38,7 +42,22 @@ python web_scraper.py
 ```
 
 ## Bonus
-In case if you would like to install any additional dependencies like scrapy - run:
+Alternatively instead of creating `data-to-scrape.csv` you can set a path to
+the file with links and selectors by specifying the `INCOMING_DATA_SOURCE`
+environment variabale like this:
+```bash
+INCOMING_DATA_SOURCE=my-file-with-data-to-scrape.csv python web_scraper.py
+```
+In addition to that, if you want to see the browser while the script is running,
+you can enable it by setting the `HEADED` environment variabale to `True` like
+this:
+```bash
+INCOMING_DATA_SOURCE=my-file-with-data-to-scrape.csv HEADED=True python web_scraper.py
+```
+
+## Optional
+In case if you would like to install any additional dependencies (for example
+scrapy) - run:
 ```bash
 pip install scrapy && pip freeze > requirements.txt
 ```
