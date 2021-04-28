@@ -30,12 +30,13 @@ As it is a .csv file, each value (cell) is separated by comma. For example:
 https://www.bbc.com/news/technology,[class*="gel-3/5@xxl"] .qa-status-date-output,[class*="gel-3/5@xxl"] .gs-c-promo-heading__title,[class*="gel-3/5@xxl"] .gs-c-section-link
 https://news.ycombinator.com/,.rank,.storylink,.age
 ```
-Or if you just want to get first 3 article titles:
+Or if you just want to get the first 3 article titles:
 ```
 https://www.cnn.com/business/tech,(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[1],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[2],(//*[ancestor::*[ul[descendant::*[contains(@data-analytics, "Top stories _list-xs_")]]] and contains(@class, "cd__headline-text")])[3]
 ```
 6. Create a `data-processed.csv` file with any data that you do not want to be
-displayed in the scraper output
+displayed in the scraper output (if it's several items you can put one
+item/string per line)
 
 ## Running
 To run the script just execute:
