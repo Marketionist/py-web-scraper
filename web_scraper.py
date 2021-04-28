@@ -1,30 +1,43 @@
 #!/usr/bin/python
 
+import os
 import asyncio
 import pprint
 import csv
 from playwright.async_api import async_playwright
 
 def parse_int (string: str) -> int:
-    return ''.join((filter(lambda x: x.isdigit(), string)))
+    return int(''.join((filter(lambda x: x.isdigit(), string))))
 
 def sort_list_by (sorting_key: str, array_to_sort: list) -> list:
     return sorted(array_to_sort, key=lambda keyy: keyy[sorting_key], reverse=True)
 
-with open('data-to-scrape.csv', mode = 'r', newline='') as file:
+incoming_data_source = os.getenv('INCOMING_DATA_SOURCE') or 'data-to-scrape.csv'
+processed_data_source = 'data-processed.csv'
+
+with open(incoming_data_source, mode = 'r', newline='') as file:
     reader = csv.reader(file)
     data = list(reader)
     lines_number = len(data)
+
+with open(processed_data_source, mode = 'r', newline='') as file:
+    reader_processed = csv.reader(file)
+    # Read data into the list and turn it to string for easy searching
+    data_processed = str(list(reader_processed))
 
 async def scrape_website (
     url: str,
     first_param_selector: str,
     second_param_selector: str,
-    third_param_selector: str
+    third_param_selector: str,
+    processed_data: list
 ) -> list:
     async with async_playwright() as p:
         iphone_11 = p.devices['iPhone 11 Pro']
-        browser = await p.chromium.launch(headless=True, slow_mo=0)
+        browser = await p.chromium.launch(
+            headless=not os.getenv('HEADED', False),
+            slow_mo=0
+        )
         context = await browser.new_context(
             **iphone_11,
             locale='de-DE',
@@ -52,12 +65,19 @@ async def scrape_website (
                 resulting_param_elements[2][index].text_content()
             )
 
-            resulting_list.append({
-                'url': url,
-                'first_param_text': resulting_texts[0].replace('\n', ''),
-                'second_param_text': resulting_texts[1].replace('\n', ''),
-                'third_param_text': resulting_texts[2].replace('\n', '')
-            })        
+            # Remove empty spaces from the beginning and the end of the string
+            first_param_text = resulting_texts[0].strip()
+
+            print(f'{first_param_text} is already in "{processed_data_source}' +
+                f'": {first_param_text in data_processed}')
+
+            if first_param_text not in data_processed:
+                resulting_list.append({
+                    'url': url,
+                    'first_param_text': parse_int(first_param_text),
+                    'second_param_text': resulting_texts[1].strip(),
+                    'third_param_text': resulting_texts[2].strip()
+                })
 
         await context.close()
         await browser.close()
@@ -69,10 +89,12 @@ async def main ():
         data[line][0],
         data[line][1],
         data[line][2],
-        data[line][3]
+        data[line][3],
+        data_processed
     ) for line in range(lines_number)])
 
-    pprint.pprint(scraped_output)
+    # Remove empty lists
+    pprint.pprint(list(filter(None, scraped_output)))
 
     # print('scraped_output: {}'.format(scraped_output))
 
