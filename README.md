@@ -2,15 +2,18 @@
 
 A scraper to collect data from the websites
 
+## Requirements
+Python version 3.7+
+
 ## Installation
 1. Clone this repository:
 ```bash
-git clone git@github.com:Marketionist/py-web-scraper.git
+git clone https://github.com/Marketionist/py-web-scraper.git
 ```
 2. Create virtual environment and activate it:
 ```bash
-python -m venv web-scraper/
-source web-scraper/bin/activate
+python -m venv py-web-scraper/
+source py-web-scraper/bin/activate
 ```
 3. Install all dependencies:
 ```bash
