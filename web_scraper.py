@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# INCOMING_DATA_SOURCE=data-to-scrape.csv HEADED=yes python web_scraper.py
+
 import os
 import asyncio
 import pprint
@@ -7,9 +9,11 @@ import csv
 from playwright.async_api import async_playwright
 
 def parse_int (string: str) -> int:
+    """ Transform a string into a digit """
     return int(''.join((filter(lambda x: x.isdigit(), string))))
 
 def sort_list_by (sorting_key: str, array_to_sort: list) -> list:
+    """ Sort a list of dictionaries by one of the dictionary key values """
     return sorted(array_to_sort, key=lambda keyy: keyy[sorting_key], reverse=True)
 
 incoming_data_source = os.getenv('INCOMING_DATA_SOURCE') or 'data-to-scrape.csv'
@@ -30,8 +34,13 @@ async def scrape_website (
     first_param_selector: str,
     second_param_selector: str,
     third_param_selector: str,
-    processed_data: list
+    processed_data: str
 ) -> list:
+    """
+    Scrape a website with Playwright and return a list of objects. Each object
+    will contain 'url', 'first_param_text', 'second_param_text',
+    'third_param_text' parsed from the website.
+    """
     async with async_playwright() as p:
         iphone_11 = p.devices['iPhone 11 Pro']
         browser = await p.chromium.launch(
@@ -86,11 +95,11 @@ async def scrape_website (
 
 async def main ():
     scraped_output = await asyncio.gather(*[scrape_website(
-        data[line][0],
-        data[line][1],
-        data[line][2],
-        data[line][3],
-        data_processed
+        url=data[line][0],
+        first_param_selector=data[line][1],
+        second_param_selector=data[line][2],
+        third_param_selector=data[line][3],
+        processed_data=data_processed
     ) for line in range(lines_number)])
 
     # Remove empty lists
