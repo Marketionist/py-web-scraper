@@ -15,9 +15,9 @@ git clone https://github.com/Marketionist/py-web-scraper.git
 python -m venv py-web-scraper/
 source py-web-scraper/bin/activate
 ```
-3. Install all dependencies:
+3. Switch to py-web-scraper folder and install all dependencies:
 ```bash
-pip install -r requirements.txt
+cd py-web-scraper && pip install -r requirements.txt
 ```
 4. Download Playwright browsers:
 ```bash
